@@ -1,0 +1,15 @@
+/*-- 自定义 --*/
+
+// home页面
+$home_header_height: 39px;
+  $home_logo_height: 100px;
+    $home_logo_img_width: 55px;
+    $home_logo_child_height: 220px;
+  $home_logo_search_width: 296px;
+
+@mixin logoHeight() {
+  * {
+    height: $home_logo_height - 40px;
+    line-height: $home_logo_height - 40px;
+  }
+}
