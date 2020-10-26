@@ -2,20 +2,20 @@
   <div class="homeLogo">
     <div class="container">
       <div class="header-logo"><a href="/#/index"></a></div>
-      <!-- <home-logo-menu></home-logo-menu> -->
+      <home-logo-menu></home-logo-menu>
       <home-logo-search></home-logo-search>
     </div>
   </div>
 </template>
 
 <script>
-// import homeLogoMenu from '../components/homeLogoMenu'
+import homeLogoMenu from '../components/homeLogoMenu'
 import homeLogoSearch from '../components/homeLogoSearch'
 
 export default {
   name: 'homeLogo',
   components: {
-    // homeLogoMenu,
+    homeLogoMenu,
     homeLogoSearch
   }
 }
@@ -27,7 +27,7 @@ export default {
   @include flex();
   padding: 20px 0;
   @include logoHeight();
-  
+
   .header-logo {
     display: inline-block;
     width: $home_logo_img_width;

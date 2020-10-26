@@ -1,12 +1,12 @@
 <template>
   <div class="menu">
-    <div class="menu-item" v-for="(item,index) in menuList" :key="index">
-      <span> {{ item.title }} </span>
-      <ul class="children">
-        <a class="product" v-for="(product,index) in phoneList" :key="index" v-bind:href="'/#/product/'+item.id">
-          <div class="pro-img"><img :src="product.mainImage" :alt="product.subtitle"/></div>
+    <div class="menu-item" v-for="(item,key) in menuList" :key="key">
+      <span> {{ key }} </span>
+      <ul class="children" v-if="item.length">
+        <a class="product" v-for="(product,index) in item" :key="index"     v-bind:href="'/#/product/'+item.id">
+          <div class="pro-img"><img :src="product.imgUrl" :alt="product.name"/></div>
           <div class="pro-name"> {{ product.name }} </div>
-          <div class="pro-price"> {{ product.price | currency }} </div>
+          <div class="pro-price"> {{ product.price }}元起 </div>
         </a>
       </ul>
     </div>
@@ -14,46 +14,23 @@
 </template>
 
 <script>
-import homeLogoMenuList from '../components/homeLogoMenuList'
+
 export default {
   name: 'homeLogoMenu',
-  components: {
-    homeLogoMenuList
-  },
   data () {
     return {
-      username: 'jack',
-      phoneList: [],
-      menuList: [
-        { title: '小米手机' },
-        { title: 'RedMi红米' },
-        { title: '电视' }
-      ],
-      phoneList: [
-        { id: 0, mainImage: 'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/b11742a0be47f9d97bb6a13ea580018d.png?thumb=1&w=160&h=110&f=webp&q=90', name: '小米10至尊纪念版', price: '5299元起' },
-        { id: 1, mainImage: 'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/82ddffd7562c54f9166fa876c143ff22.png?thumb=1&w=160&h=110&f=webp&q=90', name: '小米10 Pro', price: '4999元起' }
-      ]
+      menuList: {}
     }
   },
-  filters: {
-    currency (val) {
-      if(!val)return '0.00';
-      return '￥' + val.toFixed(2) + '元';
-    }
-  },
-  mounted () {
-    this.getProductList();
+  created() {
+    this.GetListAxios();
   },
   methods: {
-    getProductList () {
-      this.axios.get('/products', {
-        params: {
-          categoryId: '100012',
-          pageSize: 6
-        }
-      }).then((res) => {
-        this.phoneList = res.list.slice(0,6);
-      })
+    GetListAxios () {
+      this.$axios.get('/mimal/menuList').then(this.GetListSuccess);
+    },
+    GetListSuccess (res) {
+      this.menuList = res.data.data;
     }
   }
 }
@@ -81,7 +58,7 @@ export default {
     &:hover {
       color: $colorA;
       transition: all .2s ease;
-      .children{
+      .children {
         height: $home_logo_child_height;
         opacity: 1;
       }

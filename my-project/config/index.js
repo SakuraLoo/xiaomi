@@ -11,10 +11,12 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api': {
-        target: 'http://localhost:8080',
+      '/mimal/': {
+        target: 'http://mock.shtodream.cn/mock/5f96744d04f654354c74d039/mimal',
+        changeOrigin: true,
+        secure: true,
         pathRewrite: {
-          '^/api': '/static/mock'
+          '^/mimal': '/'
         }
       }
     },

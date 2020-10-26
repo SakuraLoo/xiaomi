@@ -22,6 +22,7 @@ export default {
   .wrapper {
     @include flex();
     height: 50px;
+    margin-top: 5px;
     border: 1px solid $colorH;
 
     input {
