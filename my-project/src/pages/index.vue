@@ -1,11 +1,15 @@
 <template>
   <div>
-    index
+    <index-servicebar></index-servicebar>
   </div>
 </template>
 
 <script>
+import indexServicebar from '../components/indexServicebar'
 export default {
+  components: {
+    indexServicebar
+  }
 }
 </script>
 

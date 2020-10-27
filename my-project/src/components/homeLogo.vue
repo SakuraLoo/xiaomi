@@ -37,6 +37,7 @@ export default {
       display: inline-block;
       width: $home_logo_height;
       height: $home_logo_img_width;
+      overflow: hidden;
       
       &:before {
         content: "";

@@ -5,9 +5,9 @@
         <a v-for="(item,index) in menuList" :key="index"> {{ item.title }} </a>
       </ul>
       <ul>
-        <a>登录</a>
-        <a>我的订单</a>
-        <a class="my-cart"><i class="iconfont icon-cart"></i>购物车</a>
+        <a v-if="username" @click="GotoLogin">登录</a>
+        <a v-if="!username">我的订单</a>
+        <a v-if="username" class="my-cart"><i class="iconfont icon-cart" @click="GotoCart"></i>购物车</a>
       </ul>
     </div>
   </div>
@@ -18,6 +18,7 @@ export default {
   name: 'homeTopbar',
   data () {
     return {
+      username: "",
       menuList: [
         { title: "小米商城" },
         { title: "MIUI" },
@@ -32,6 +33,14 @@ export default {
         { title: "智能生活" },
         { title: "Select Location" }
       ]
+    }
+  },
+  methods: {
+    GotoLogin () {
+      this.$router.push('/login');
+    },
+    GotoCart () {
+      this.$router.push('/cart');
     }
   }
 }
