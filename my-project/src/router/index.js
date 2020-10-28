@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from '@/pages/index'
+
 import home from '@/pages/home'
+import index from '@/pages/index'
+
 import alipay from '@/pages/alipay'
 import cart from '@/pages/cart'
 import login from '@/pages/login'
@@ -16,14 +18,17 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/index',
-      name: 'index',
-      component: index
-    },
-    {
-      path: '/home',
+      path: '/',
       name: 'home',
-      component: home
+      component: home,
+      redirect:'/index',
+      children:[
+        {
+          path: '/index',
+          name: 'index',
+          component: index,
+        }
+      ]
     },
     {
       path: '/alipay',

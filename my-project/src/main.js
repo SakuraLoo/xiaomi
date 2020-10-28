@@ -12,6 +12,7 @@ import { Message } from 'element-ui'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import axios from 'axios'
 
+import 'babel-polyfill'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/scss/index.scss'
 import './assets/fonts/iconfont.css'
