@@ -2,7 +2,7 @@
   <div class="indexSwiper">
     <swiper class="swiper" :options="swiperOption">
       <swiper-slide v-for="(item,index) in swiperList" :key="index">
-        <img :src="require(`../assets/imgs/ads/${item.imgUrl}.png`)"/>
+        <img :src="item.imgUrl"/>
       </swiper-slide>
       <div class="swiper-pagination" slot="pagination"></div>
     </swiper>
@@ -15,10 +15,7 @@ export default {
   data() {
     return {
       swiperList: [
-        {imgUrl: 'ads-1'},
-        {imgUrl: 'ads-2'},
-        {imgUrl: 'ads-3'},
-        {imgUrl: 'ads-4'}
+        {imgUrl: '../assets/imgs/ads/ads-1.png'}
       ],
       swiperOption: {
         effect: 'cube',
