@@ -6,10 +6,28 @@ $home_header_height: 39px;
     $home_logo_img_width: 55px;
     $home_logo_child_height: 220px;
   $home_logo_search_width: 296px;
+  // index模块
+  $index_swiper_width: 234px;
+  $index_swiper_height: 460px;
+  
+  // z-index
+  $index_menu_swiper: 1;
+  $index_menu_index: 2;
 
 @mixin logoHeight() {
   * {
     height: $home_logo_height - 40px;
     line-height: $home_logo_height - 40px;
   }
+}
+@mixin absolute0() {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+@mixin flexCenter() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }

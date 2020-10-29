@@ -61,21 +61,26 @@ export default {
       transition: all .2s ease;
       .children {
         height: $home_logo_child_height;
-        opacity: 1;
+        // opacity: 1;
+        display: block;
       }
     }
-    .children{
+    .children {
       position: absolute;
-      top: 112px;
+      top: 80px;
       left: 0;
       width: $min-width;
-      opacity: 0;
+      // opacity: 0;
+      display: none;
       overflow: hidden;
       border-top: 1px solid $colorH;
       box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.11);
       z-index: 10;
       transition: all .5s;
       background-color: #ffffff;
+      &:hover {
+        display: block;
+      }
       .product {
         position: relative;
         float: left;
@@ -84,7 +89,7 @@ export default {
         font-size: $fontK;
         line-height: $fontK;
         text-align: center;
-        .pro-img{
+        .pro-img {
           height: 100px;
           margin: 38px 0 20px 0;
           img{
@@ -96,14 +101,14 @@ export default {
           height: 18px;
           line-height: 18px;
         }
-        .pro-name{
+        .pro-name {
           font-weight: bold;
           color: $colorB;
         }
-        .pro-price{
+        .pro-price {
           color: $colorA;
         }
-        &:before{
+        &:before {
           content: '';
           position: absolute;
           top: 28px;
@@ -112,7 +117,7 @@ export default {
           height: 100px;
           width: 1px;
         }
-        &:last-child:before{
+        &:last-child:before {
           display: none;
         }
       }

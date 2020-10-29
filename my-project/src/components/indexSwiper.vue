@@ -6,8 +6,8 @@
       </swiper-slide>
       <!-- pagination -->
       <div class="swiper-pagination" id="pagination" slot="pagination"></div>
-      <div class="swiper-button-prev swiper-button-white" slot="button-prev" @click="prev"></div>
-      <div class="swiper-button-next swiper-button-white" slot="button-next" @click="next"></div>
+      <div class="swiper-button swiper-button-prev swiper-button-white" slot="button-prev" @click="prev"></div>
+      <div class="swiper-button swiper-button-next swiper-button-white" slot="button-next" @click="next"></div>
     </swiper>
   </div>
 </template>
@@ -59,31 +59,33 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/scss/index.scss";
 .indexSwiper {
-  position: relative;
-  overflow: hidden;
-  height: 460px;
+  z-index: $index_menu_swiper;
 }
 .swiper {
-  height: 100%;
+  height: $index_swiper_height;
   .swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-weight: bold;
-    font-size: 12px * 2;
-    background-position: center;
-    background-size: cover;
-    color: #fff;
+    @include flexCenter();
     .slide_img {
-      width: 100%;
-      height: auto;
+      @include absolute0();
     }
   }
   .swiper-pagination {
     /deep/ .swiper-pagination-bullet.swiper-pagination-bullet-active {
       background-color: #fff;
     }
+  }
+  .swiper-button {
+    padding: 20px 10px;
+    transform: scale(0.8);
+    border-radius: 3px;
+  }
+  .swiper-button:hover {
+    background-color: rgba(0, 0, 0, 0.473);
+    transition: all .2s ease;
+  }
+  .swiper-button-prev {
+    position: absolute;
+    left: $index_swiper_width + 10px;
   }
 }
 </style>

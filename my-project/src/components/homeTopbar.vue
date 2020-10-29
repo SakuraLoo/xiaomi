@@ -5,9 +5,9 @@
         <a v-for="(item,index) in menuList" :key="index"> {{ item.title }} </a>
       </ul>
       <ul>
-        <a v-if="username" @click="GotoLogin">登录</a>
-        <a v-if="!username">我的订单</a>
-        <a v-if="username" class="my-cart"><i class="iconfont icon-cart" @click="GotoCart"></i>购物车</a>
+        <a v-if="!username" @click="GotoLogin">登录</a>
+        <a v-if="username">我的订单</a>
+        <a v-if="!username" class="my-cart"><i class="fa fa-cart-plus" @click="GotoCart"></i>购物车</a>
       </ul>
     </div>
   </div>
@@ -83,7 +83,7 @@ export default {
       background-color: $colorA;
       text-align: center;
       color: #fff;
-      .iconfont {
+      .fa {
         margin-right: 5px;
       }
     }

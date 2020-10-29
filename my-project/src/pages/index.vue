@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="container">
+      <index-menu></index-menu>
       <index-swiper></index-swiper>
       <index-servicebar></index-servicebar>
     </div>
@@ -8,11 +9,12 @@
 </template>
 
 <script>
+import indexMenu from '../components/indexMenu'
 import indexSwiper from '../components/indexSwiper'
 import indexServicebar from '../components/indexServicebar'
 export default {
   components: {
-    indexSwiper,indexServicebar
+    indexMenu,indexSwiper,indexServicebar
   }
 }
 </script>

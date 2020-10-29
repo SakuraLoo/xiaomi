@@ -14,8 +14,8 @@ import axios from 'axios'
 
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/scss/index.scss'
-import './assets/fonts/iconfont.css'
 import 'swiper/swiper-bundle.css'
+import 'font-awesome/css/font-awesome.css'
 
 Vue.use(Vuex)
 Vue.use(VueCookie);
