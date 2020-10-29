@@ -16,14 +16,17 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/index',
-      name: 'index',
-      component: index
-    },
-    {
-      path: '/home',
-      name: 'home',
-      component: home
+      path:'/',
+      name:'home',
+      component:home,
+      redirect:'/index',
+      children:[
+        {
+          path: '/index',
+          name: 'index',
+          component: index
+        }
+      ]
     },
     {
       path: '/alipay',
