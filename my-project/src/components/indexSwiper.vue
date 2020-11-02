@@ -85,7 +85,7 @@ export default {
   }
   .swiper-button-prev {
     position: absolute;
-    left: $index_swiper_width + 10px;
+    left: $index_menu_width + 10px;
   }
 }
 </style>
