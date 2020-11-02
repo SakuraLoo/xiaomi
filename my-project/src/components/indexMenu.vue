@@ -104,7 +104,8 @@ export default {
 
   &-li:hover {
     .children {
-      opacity: 1;
+      // opacity: 1;
+      display: block;
     }
   }
 
@@ -125,7 +126,8 @@ export default {
   }
 
   .children {
-    opacity: 0;
+    // opacity: 0;
+    display: none;
     position: absolute;
     top: 0;
     width: $min-width - $index_menu_width;
