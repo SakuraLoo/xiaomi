@@ -105,7 +105,7 @@ export default {
   &-li:hover {
     .children {
       // opacity: 1;
-      display: block;
+      display: flex;
     }
   }
 

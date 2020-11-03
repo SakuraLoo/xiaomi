@@ -10,10 +10,15 @@ $home_header_height: 39px;
   $index_menu_width: 234px;
   $index_swiper_height: 460px;
   $index_ad_height: 174px;
+  $index_flash_height: 340px;
   
   // z-index
   $index_menu_swiper: 1;
   $index_menu_index: 2;
+  $index_flash_swiperBtn_index: 2;
+
+  // color
+  $wine_red: #ef3a3b;
 
 @mixin logoHeight() {
   * {
@@ -21,14 +26,32 @@ $home_header_height: 39px;
     line-height: $home_logo_height - 40px;
   }
 }
+
 @mixin absolute0() {
   position: absolute;
   top: 0;
   left: 0;
 }
+
 @mixin flexCenter() {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+@mixin ellipsis() {
+  white-space: nowrap;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+@mixin clearBoth() {
+  &:after {
+    content: "";
+    height: 0;
+    display: block;
+    clear: both;
+  }
 }
