@@ -29,7 +29,7 @@ export default {
 .flashCount {
   padding-top: 39px;
   width: $index_menu_width;
-  height: $index_flash_height - 39px;
+  height: $index_flash_height - 39px - 1px;
   background-color: #f1eded;
   border-top: 1px #e53935 solid;
   text-align: center;

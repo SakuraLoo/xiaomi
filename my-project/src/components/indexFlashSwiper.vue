@@ -77,14 +77,14 @@ export default {
     border-top: 1px solid;
     * {
       line-height: 24px;
-      font-size: 14px;
+      font-size: $fontJ;
     }
     .flash_slider_a {
       display: block;
       padding-top: 39px;
-      height: calc(100% - 39px);
+      height: calc(100% - 39px - 1px);
       background-color: #fff;
-      color: #b0b0b0; 
+      color: #b0b0b0;
       .swiper_img {
         margin: 0 auto 22px;
         width: 160px;
@@ -98,7 +98,7 @@ export default {
         display: block;
         width: 80%;
         margin-left: 10%;
-        font-size: 14px;
+        font-size: $fontJ;
         font-weight: 400;
         color: #212121;
         @include ellipsis();
