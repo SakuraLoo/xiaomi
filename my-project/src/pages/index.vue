@@ -8,6 +8,7 @@
     <section class="gray_bc">
       <section class="container">
         <index-flash></index-flash>
+        <index-phone></index-phone>
       </section>
     </section>
     <section class="container">
@@ -21,10 +22,11 @@ import indexMenu from '../components/indexMenu'
 import indexSwiper from '../components/indexSwiper'
 import indexAd from '../components/indexAd'
 import indexFlash from '../components/indexFlash'
+import indexPhone from '../components/indexPhone'
 import indexServicebar from '../components/indexServicebar'
 export default {
   components: {
-    indexMenu,indexSwiper,indexAd,indexFlash,indexServicebar
+    indexMenu,indexSwiper,indexAd,indexFlash,indexPhone,indexServicebar
   }
 }
 </script>
