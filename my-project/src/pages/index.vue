@@ -9,6 +9,7 @@
       <section class="container">
         <index-flash></index-flash>
         <index-phone></index-phone>
+        <index-home></index-home>
       </section>
     </section>
     <section class="container">
@@ -23,10 +24,11 @@ import indexSwiper from '../components/indexSwiper'
 import indexAd from '../components/indexAd'
 import indexFlash from '../components/indexFlash'
 import indexPhone from '../components/indexPhone'
+import indexHome from '../components/indexHome'
 import indexServicebar from '../components/indexServicebar'
 export default {
   components: {
-    indexMenu,indexSwiper,indexAd,indexFlash,indexPhone,indexServicebar
+    indexMenu,indexSwiper,indexAd,indexFlash,indexPhone,indexHome,indexServicebar
   }
 }
 </script>

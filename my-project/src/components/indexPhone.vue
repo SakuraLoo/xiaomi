@@ -5,7 +5,13 @@
         <indexGrayLeftimg :img="aImg"></indexGrayLeftimg>
       </index-gray-left>
       <index-gray-right>
-        <index-gray-li :list="phoneList" :link="phoneLink"></index-gray-li>
+        <a class="detail" :href="phoneLink">
+          <span>查看全部</span>
+          <i class="fa fa-chevron-circle-right"></i>
+        </a>
+        <li class="phoneli" v-for="(item,index) in phoneList" :key="index">
+          <index-gray-li :item="item"></index-gray-li>
+        </li>
       </index-gray-right>
     </index-gray>
   </div>
@@ -101,6 +107,43 @@ export default {
     height: 614px;
     img {
       width: 100%;
+    }
+  }
+  .detail {
+    margin-right: 3px;
+    position: absolute;
+    top: 22px;
+    right: 0;
+    color: #424242;
+    font-size: 16px;
+    &:hover {
+      * {
+        color: $colorA;
+        transition: all .2s ease;
+      }
+    }
+    i {
+      position: relative;
+      top: 2px;
+      left: 3px;
+      color: #b0b0b0;
+      font-size: 22px;
+    }
+  }
+  
+  .phoneli {
+    float: left;
+    margin-left: 14px;
+    width: calc((100% - 14px*4)/4);
+    height: 300px;
+    background-color: #fff;
+    text-align: center;
+    &:hover {
+      box-shadow:rgba(0, 0, 0, 0.144) 0 0 20px;
+      transition: all .2s ease;
+    }
+    &:nth-child(2),&:nth-child(3),&:nth-child(4),&:nth-child(5) {
+      margin-bottom: 14px;
     }
   }
 }
