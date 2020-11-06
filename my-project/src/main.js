@@ -11,12 +11,13 @@ import VueCookie from 'vue-cookie'
 import { Message } from 'element-ui'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import axios from 'axios'
-import ElementUI from 'element-ui';
+import ElementUI from 'element-ui'
 
 import './assets/scss/index.scss'
 import 'swiper/swiper-bundle.css'
 import 'font-awesome/css/font-awesome.css'
 import 'element-ui/lib/theme-chalk/index.css'
+import 'jquery'
 
 Vue.use(Vuex)
 Vue.use(VueCookie);

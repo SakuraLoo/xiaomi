@@ -10,6 +10,7 @@
         <index-flash></index-flash>
         <index-phone></index-phone>
         <index-home></index-home>
+        <index-smart></index-smart>
       </section>
     </section>
     <section class="container">
@@ -25,10 +26,11 @@ import indexAd from '../components/indexAd'
 import indexFlash from '../components/indexFlash'
 import indexPhone from '../components/indexPhone'
 import indexHome from '../components/indexHome'
+import indexSmart from '../components/indexSmart'
 import indexServicebar from '../components/indexServicebar'
 export default {
   components: {
-    indexMenu,indexSwiper,indexAd,indexFlash,indexPhone,indexHome,indexServicebar
+    indexMenu,indexSwiper,indexAd,indexFlash,indexPhone,indexHome,indexSmart,indexServicebar
   }
 }
 </script>

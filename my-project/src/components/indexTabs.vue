@@ -1,5 +1,5 @@
 <template>
-  <el-tabs ref="navTabs" class="newElementCSS">
+  <el-tabs class="newElementCSS">
     <el-tab-pane
       v-for="(item,index) in list" :key="index"
       :label="item.label"
@@ -7,9 +7,11 @@
       <li class="phoneli" v-for="(li,index) in (item.list)" :key="index">
         <index-gray-li :item="li"></index-gray-li>
       </li>
-      <li class="phoneAd">
-        <h3> {{ item.ad.title }} </h3>
-        <p> {{ item.ad.price }} </p>
+      <li class="phoneAd" v-if="ItemAd(item.ad)">
+        <div class="adText">
+          <h3> {{ item.ad.title }} </h3>
+          <p> {{ item.ad.price }} </p>
+        </div>
         <img :src="item.ad.img"/>
       </li>
       <li class="phoneMore">
@@ -39,22 +41,20 @@ export default {
     }
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
+    ItemAd (ad) {
+      var result = true;
+      if (JSON.stringify(ad)=='{}') {
+        result = false;
+      }
+      return result;
     }
   },
   mounted() {
-    this.$nextTick(() => {
-      this.$refs.navTabs.$refs.nav.$nextTick(() => {
-        var target = document.getElementsByClassName("el-tabs__item");
-        let that = this;
-        for (let i = 0; i < target.length; i++) {
-          target[i].addEventListener("mouseover", () => {
-            that.$refs.navTabs.handleTabClick(1, String(i));
-          });
-        }
-      });
-    });
+    $(function() {
+      $('.el-tabs__item').hover(function() {
+        $(this).click();
+      })
+    })
   }
 }
 </script>
@@ -113,7 +113,7 @@ export default {
 .phoneAd h3 {
   float: left;
   margin: 40px 0 5px 25px;
-  width: 100px;
+  width: 93px;
   font-weight: normal;
 }
 .phoneAd p {
@@ -137,7 +137,7 @@ export default {
   display: flex;
   align-items: center;
 }
-.moreText {
+.moreText,.adText {
   float: left;
   width: 50%;
 }
