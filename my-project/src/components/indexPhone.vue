@@ -126,7 +126,7 @@ export default {
       position: relative;
       top: 2px;
       left: 3px;
-      color: #b0b0b0;
+      color: $font_gray;
       font-size: 22px;
     }
   }

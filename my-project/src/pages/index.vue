@@ -12,6 +12,7 @@
         <index-home></index-home>
         <index-smart></index-smart>
         <index-match></index-match>
+        <index-video></index-video>
       </section>
     </section>
     <section class="container">
@@ -29,10 +30,11 @@ import indexPhone from '../components/indexPhone'
 import indexHome from '../components/indexHome'
 import indexSmart from '../components/indexSmart'
 import indexMatch from '../components/indexMatch'
+import indexVideo from '../components/indexVideo'
 import indexServicebar from '../components/indexServicebar'
 export default {
   components: {
-    indexMenu,indexSwiper,indexAd,indexFlash,indexPhone,indexHome,indexSmart,indexMatch,indexServicebar
+    indexMenu,indexSwiper,indexAd,indexFlash,indexPhone,indexHome,indexSmart,indexMatch,indexVideo,indexServicebar
   }
 }
 </script>
