@@ -1,5 +1,5 @@
 <template>
-  <a class="indexFlash-a"><img :src="img"/></a>
+  <a class="indexFlash-a"><img v-lazy="img"/></a>
 </template>
 
 <script>

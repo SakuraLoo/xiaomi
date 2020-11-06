@@ -1,7 +1,7 @@
 <template>
   <div>
-    <a class="indexFlash-a"><img :src="img"/></a>
-    <a class="indexFlash-a"><img :src="img2"/></a>
+    <a class="indexFlash-a"><img v-lazy="img"/></a>
+    <a class="indexFlash-a"><img v-lazy="img2"/></a>
   </div>
 </template>
 

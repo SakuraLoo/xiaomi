@@ -3,7 +3,7 @@
     <ul class="ad-icon">
       <li class="ad-icon-li" v-for="(item,index) in adList" :key="index">
         <a :href="item.link">
-          <img :src="item.img"/>
+          <img v-lazy="item.img"/>
           <p> {{ item.title }} </p>
         </a>
       </li>
@@ -11,7 +11,7 @@
     <ul class="ad-list">
       <li class="ad-list-li" v-for="(item,index) in imglist" :key="index">
         <a :href="item.link">
-          <img :src="item.img"/>
+          <img v-lazy="item.img"/>
         </a>
       </li>
     </ul>

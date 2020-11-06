@@ -21,9 +21,11 @@ import 'jquery'
 
 Vue.use(Vuex)
 Vue.use(VueCookie);
-Vue.use(VueLazyLoad);
 Vue.use(VueAwesomeSwiper);
 Vue.use(ElementUI);
+Vue.use(VueLazyLoad, {
+  loading: require('./assets/imgs/loading-svg/loading-bars.svg')
+});
 
 Vue.prototype.$axios = axios;
 Vue.prototype.$message = Message;

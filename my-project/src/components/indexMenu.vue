@@ -8,7 +8,7 @@
       <div :class="['children', 'col-'+colNum]" v-show="colNum!=0">
         <ul v-for="(item,key) in newCol" :key="key">
           <div class="children-li" v-for="(child,index) in item" :key="index">
-            <img :src="child.img"/>
+            <img v-lazy="child.img"/>
             <p> {{ child.name }} </p>
           </div>
         </ul>

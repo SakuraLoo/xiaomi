@@ -2,7 +2,7 @@
   <li>
     <a class="phoneli_a" :href="'/#/product/'+item.id">
       <div class="phoneli_a-img">
-        <img :src="item.img" alt=""/>
+        <img v-lazy="item.img" alt=""/>
       </div>
       <label> {{ item.title }} </label>
       <p> {{ item.subtitle }} </p>

@@ -4,7 +4,7 @@
       <span> {{ key }} </span>
       <ul class="children" v-if="item.length">
         <a class="product" v-for="(product,index) in item" :key="index" v-bind:href="'/#/product/'+item.id">
-          <div class="pro-img"><img :src="product.imgUrl" :alt="product.name"/></div>
+          <div class="pro-img"><img v-lazy="product.imgUrl" :alt="product.name"/></div>
           <div class="pro-name"> {{ product.name }} </div>
           <div class="pro-price"> {{ product.price }}元起 </div>
         </a>

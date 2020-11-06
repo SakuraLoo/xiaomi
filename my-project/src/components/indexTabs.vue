@@ -12,14 +12,14 @@
           <h3> {{ item.ad.title }} </h3>
           <p> {{ item.ad.price }} </p>
         </div>
-        <img :src="item.ad.img"/>
+        <img v-lazy="item.ad.img"/>
       </li>
       <li class="phoneMore">
         <div class="moreText">
           <p>浏览更多</p>
           <span> {{ item.label }} </span>
         </div>
-        <img src="../assets/imgs/right.png"/>
+        <img v-lazy="'../assets/imgs/right.png'"/>
       </li>
     </el-tab-pane>
   </el-tabs>

@@ -4,7 +4,7 @@
     <div class="graybc_con">
       <slot></slot>
     </div>
-    <a class="indexFlash-a"><img :src="img"/></a>
+    <a class="indexFlash-a"><img v-lazy="img"/></a>
   </div>
 </template>
 

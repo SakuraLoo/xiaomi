@@ -8,7 +8,7 @@
     <li class="videoli" v-for="(item,index) in videoList" :key="index">
       <a :href="'/#/product/'+item.id">
         <div class="video_imgCon">
-          <img :src="item.img"/>
+          <img v-lazy="item.img"/>
           <div class="video_iCon"><i class="fa fa-play"></i></div>
         </div>
         <div class="video_textCon">

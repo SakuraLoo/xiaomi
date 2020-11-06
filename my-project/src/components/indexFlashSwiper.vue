@@ -4,7 +4,7 @@
       <swiper-slide v-for="(item,index) in swiperList" :key="index" class="flash_slider">
         <a class="flash_slider_a" :href="'/#/product/'+item.id">
           <div class="swiper_img">
-            <img :src="item.img" alt="" class="slide_img"/>
+            <img v-lazy="item.img" alt="" class="slide_img"/>
           </div>
           <label> {{ item.title }} </label>
           <p> {{ item.subtitle }} </p>
