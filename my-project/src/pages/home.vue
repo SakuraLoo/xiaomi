@@ -2,7 +2,7 @@
   <div>
     <home-header></home-header>  
     <router-view></router-view>
-    <!-- <home-footer></home-footer> -->
+    <home-footer></home-footer>
   </div>
 </template>
 

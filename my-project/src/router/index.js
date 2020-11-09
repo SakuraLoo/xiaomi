@@ -13,10 +13,11 @@ import product from '@/pages/product'
 
 Vue.use(Router)
 
-export default new Router({
+// export default new Router({
+const router = new Router({
   routes: [
     {
-      path:'/',
+      path:'/home',
       name:'home',
       component:home,
       redirect:'/index',
@@ -26,7 +27,19 @@ export default new Router({
           name: 'index',
           component: index
         }
-      ]
+      ],
+      meta: {
+        isLogin: true
+      }
+    },
+    {
+      path: '/',
+      redirect: '/home'
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: login
     },
     {
       path: '/alipay',
@@ -37,11 +50,6 @@ export default new Router({
       path: '/cart',
       name: 'cart',
       component: cart
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: login
     },
     {
       path: '/order',
@@ -70,3 +78,20 @@ export default new Router({
     }
   ]
 })
+
+// 导航守卫
+// 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
+router.beforeEach((to, from, next) => {
+  if (to.path === '/login') {
+    next();
+  } else {
+    let token = localStorage.getItem('Authorization');
+ 
+    if (token === 'null' || token === '') {
+      next('/login');
+    } else {
+      next();
+    }
+  }
+});
+export default router;

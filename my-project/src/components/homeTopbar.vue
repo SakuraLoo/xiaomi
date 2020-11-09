@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 export default {
   name: 'homeTopbar',
   data () {
@@ -34,6 +35,12 @@ export default {
         { title: "Select Location" }
       ]
     }
+  },
+  mounted() {
+    console.log(this.$store);
+  },
+  computed:{
+    ...mapMutations(['username','cartCount'])
   },
   methods: {
     GotoLogin () {
