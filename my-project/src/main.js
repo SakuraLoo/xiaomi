@@ -11,6 +11,7 @@ import VueCookie from 'vue-cookie'
 import { Message } from 'element-ui'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import axios from 'axios'
+// import axios from './util/interceptor.js'
 import ElementUI from 'element-ui'
 
 import './assets/scss/index.scss'
@@ -28,6 +29,7 @@ Vue.use(VueLazyLoad, {
 });
 
 Vue.prototype.$axios = axios;
+Vue.prototype.$http = axios;
 Vue.prototype.$message = Message;
 Vue.config.productionTip = false;
 
@@ -39,22 +41,3 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
-
-
-// 登录
-router.afterEach(route => {
-  window.scroll(0, 0);
-});
-// 添加请求拦截器，在请求头中加token
-axios.interceptors.request.use(
-  config => {
-    if (localStorage.getItem('Authorization')) {
-      config.headers.Authorization = localStorage.getItem('Authorization');
-    }
- 
-    return config;
-  },
-  error => {
-    return Promise.reject(error);
-  }
-);

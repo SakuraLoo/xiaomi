@@ -1,57 +1,59 @@
 <template>
-  <div class="login">
-    <div class="container">
-      <a href="/#/index"><img src="../assets/imgs/login-logo.png" alt=""></a>
-    </div>
-    <a :href="product.link">
-      <div class="wrapper" v-if="product.img" :style="{background: 'url('+ product.img +') no-repeat center',backgroundSize: 'cover'}"></div>
-    </a>
-    <div class="login-form">
-      <el-tabs v-model="activeName" stretch>
-        <el-tab-pane label="帐号登录" name="first">
-          <div class="input">
-            <input type="text" placeholder="邮箱/手机号码/小米ID" v-model="loginForm.username">
-          </div>
-          <div class="input">
-            <input type="password" placeholder="密码" v-model="loginForm.password">
-          </div>
-          <div class="btn-box">
-            <a class="btn" @click="login">登录</a>
-          </div>
-          <div class="tips">
-            <p class="wrong">
-              <span v-if="wrong.username == true || wrong.password == true">用户名或密码错误！</span>
-              <span v-else></span>
-            </p>
-            <div class="sms">手机短信登录/注册</div>
-            <div class="reg">立即注册<span>|</span>忘记密码？</div>
-          </div>
-          <div class="icons">
-            <a v-for="(item,index) in iconList" :key="index" :href="item.link"><img :src="item.icon"/></a>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane label="扫码登录" name="second">
-          <div class="scanCon">
-            <canvas/>
-            <p>使用<span>小米商城APP</span>扫一扫</p>
-            <p>小米手机可打开「设置」>「小米帐号」扫码登录</p>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
-    <div class="footer">
-      <div class="footer-link">
-        <a href="https://www.imooc.com/u/1343480" target="_blank">河畔一角主页</a><span>|</span>
-        <a href="https://coding.imooc.com/class/113.html" target="_blank">Vue全栈课程</a><span>|</span>
-        <a href="https://coding.imooc.com/class/236.html" target="_blank">React全家桶课程</a><span>|</span>
-        <a href="https://coding.imooc.com/class/343.html" target="_blank">微信支付专项课程（H5+小程序/云+Node+MongoDB）</a>
+  <div>
+    <div class="login" v-show="showLogin">
+      <div class="container">
+        <a href="/#/index"><img src="../assets/imgs/login-logo.png" alt=""></a>
       </div>
-      <p class="copyright">Copyright ©2019 mi.futurefe.com All Rights Reserved.</p>
+      <a :href="product.link">
+        <div class="wrapper" v-if="product.img" :style="{background: 'url('+ product.img +') no-repeat center',backgroundSize: 'cover'}"></div>
+      </a>
+      <div class="login-form">
+        <el-tabs v-model="activeName" stretch>
+          <el-tab-pane label="帐号登录" name="first">
+            <div class="input">
+              <input type="text" placeholder="邮箱/手机号码/小米ID" v-model="username">
+            </div>
+            <div class="input">
+              <input type="password" placeholder="密码" v-model="password">
+            </div>
+            <div class="btn-box">
+              <a class="btn" @click="login">登录</a>
+            </div>
+            <div class="tips">
+              <p class="wrong">
+                <span v-if="wrong.username == true || wrong.password == true">用户名或密码错误！</span>
+                <span v-else></span>
+              </p>
+              <div class="sms">手机短信登录/注册</div>
+              <div class="reg"><router-link to="/register">立即注册</router-link><span>|</span><a>忘记密码？</a></div>
+            </div>
+            <div class="icons">
+              <a v-for="(item,index) in iconList" :key="index" :href="item.link"><img :src="item.icon"/></a>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="扫码登录" name="second">
+            <div class="scanCon">
+              <canvas/>
+              <p>使用<span>小米商城APP</span>扫一扫</p>
+              <p>小米手机可打开「设置」>「小米帐号」扫码登录</p>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+      <div class="footer">
+        <div class="footer-link">
+          <a href="https://www.imooc.com/u/1343480" target="_blank">河畔一角主页</a><span>|</span>
+          <a href="https://coding.imooc.com/class/113.html" target="_blank">Vue全栈课程</a><span>|</span>
+          <a href="https://coding.imooc.com/class/236.html" target="_blank">React全家桶课程</a><span>|</span>
+          <a href="https://coding.imooc.com/class/343.html" target="_blank">微信支付专项课程（H5+小程序/云+Node+MongoDB）</a>
+        </div>
+        <p class="copyright">Copyright ©2019 mi.futurefe.com All Rights Reserved.</p>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex';
+import {setCookie,getCookie} from '../assets/js/cookie.js'
 export default {
   data () {
     return {
@@ -60,10 +62,6 @@ export default {
         img: "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/72644d9b8031286de3cc74e151aefd90.jpg"
       },
       activeName: 'first',
-      loginForm: {
-        username: '',
-        password: ''
-      },
       wrong: {
         username: false,
         password: false
@@ -73,31 +71,42 @@ export default {
         {link: "", icon: require('../assets/imgs/icons/weibo.png')},
         {link: "", icon: require('../assets/imgs/icons/alipay.png')},
         {link: "", icon: require('../assets/imgs/icons/wechat.png')}
-      ]
+      ],
+      
+      showLogin: true,
+      showRegister: false,
+      showTishi: false,
+      tishi: '',
+      username: '',
+      password: '',
+      newUsername: '',
+      newPassword: ''
     }
   },
-  methods: {
-    ...mapMutations(['changeLogin']),
-    login () {
+  mounted(){
+    /*页面挂载获取cookie，如果存在username的cookie，则跳转到主页，不需登录*/
+    if(getCookie('username')){
+        this.$router.push('/home')
+    }
+  },
+  methods:{
+    login(){
       let _this = this;
-      if (this.loginForm.username === '' || this.loginForm.password === '') {
-        alert('账号或密码不能为空');
-      } else {
-        this.$axios({
-          method: 'post',
-          url: 'http://mock.shtodream.cn/mock/5f96744d04f654354c74d039/mimal/login',
-          data: _this.loginForm
-        }).then(res => {
-          console.log(res.data);
-          _this.userToken = 'Bearer ' + res.data.data.body.token;
-          // 将用户token保存到vuex中
-          _this.changeLogin({ Authorization: _this.userToken });
-          if(_this.loginForm.username != res.data.data.username) {
+      if(this.username == "" || this.password == ""){
+        alert("请输入用户名或密码")
+      }else{
+        let data = {'username':this.username,'password':this.password}
+        /*接口请求*/
+        this.$http.post(' http://mock.shtodream.cn/mock/5fa8fc178e13766542114da6/mimal/login',data).then((res)=>{
+          if(_this.username != res.data.data.username) {
             this.wrong.username = true;
-          } else if (_this.loginForm.password != res.data.data.password) {
+          } else if (_this.password != res.data.data.password) {
             this.wrong.password = true;
           } else {
-            _this.$router.push('/home');
+            setCookie('username',this.username,1000*60)
+            setTimeout(function(){
+                this.$router.push('/')
+            }.bind(this),1000)
           }
         }).catch(error => {
           console.log('系统提示：账号或密码错误');
@@ -132,7 +141,6 @@ export default {
   height: 26px;
   background: #e0e0e0;
 }
-
 .login{
   &>.container{
     height: 98px;
@@ -141,7 +149,6 @@ export default {
       height:100%;
     }
   }
-
   .wrapper {
     height:576px;
   }
@@ -201,6 +208,9 @@ export default {
         span{
           margin:0 7px;
         }
+        a:hover {
+          color: $colorA;
+        }
       }
     }
     .icons {
@@ -220,7 +230,6 @@ export default {
         }
       }
     }
-
     .scanCon {
       width: 100%;
       canvas {
@@ -242,7 +251,6 @@ export default {
       }
     }
   }
-
   .footer{  
     height:100px;
     padding-top:60px;

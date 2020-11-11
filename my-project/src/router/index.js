@@ -5,6 +5,7 @@ import home from '@/pages/home'
 import alipay from '@/pages/alipay'
 import cart from '@/pages/cart'
 import login from '@/pages/login'
+import register from '@/pages/register'
 import order from '@/pages/order'
 import orderConfirm from '@/pages/orderConfirm'
 import orderList from '@/pages/orderList'
@@ -40,6 +41,11 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: login
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: register
     },
     {
       path: '/alipay',
@@ -79,19 +85,4 @@ const router = new Router({
   ]
 })
 
-// 导航守卫
-// 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
-router.beforeEach((to, from, next) => {
-  if (to.path === '/login') {
-    next();
-  } else {
-    let token = localStorage.getItem('Authorization');
- 
-    if (token === 'null' || token === '') {
-      next('/login');
-    } else {
-      next();
-    }
-  }
-});
 export default router;
