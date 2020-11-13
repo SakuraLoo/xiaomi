@@ -10,7 +10,6 @@ import order from '@/pages/order'
 import orderConfirm from '@/pages/orderConfirm'
 import orderList from '@/pages/orderList'
 import orderPay from '@/pages/orderPay'
-import product from '@/pages/product'
 
 Vue.use(Router)
 
@@ -27,6 +26,16 @@ const router = new Router({
           path: '/index',
           name: 'index',
           component: index
+        },
+        {
+          path: '/product/:id',
+          name: 'product',
+          component: () => import('../pages/product.vue')
+        },
+        {
+          path: '/detail/:id',
+          name: 'detail',
+          component: () => import('../pages/detail.vue')
         }
       ],
       meta: {
@@ -76,11 +85,6 @@ const router = new Router({
       path: '/orderPay',
       name: 'orderPay',
       component: orderPay
-    },
-    {
-      path: '/product',
-      name: 'product',
-      component: product
     }
   ]
 })

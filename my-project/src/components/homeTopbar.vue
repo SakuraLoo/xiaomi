@@ -51,13 +51,13 @@ export default {
   mounted() {
     console.log(this.$store);
     
-            /*页面挂载获取保存的cookie值，渲染到页面上*/
-            let uname = getCookie('username')
-            this.name = uname
-            /*如果cookie不存在，则跳转到登录页*/
-            if(uname == ""){
-                this.$router.push('/login')
-            }
+    /*页面挂载获取保存的cookie值，渲染到页面上*/
+    let uname = getCookie('username')
+    this.name = uname
+    /*如果cookie不存在，则跳转到登录页*/
+    // if(uname == ""){
+    //     this.$router.push('/login')
+    // }
   },
   computed:{
     ...mapMutations(['username','cartCount'])
@@ -72,15 +72,9 @@ export default {
     GotoCart () {
       this.$router.push('/cart');
     },
-    // quit(){
-    //     /*删除cookie*/
-    //     delCookie('username')
-    //     console.log('njnjjm')
-    // },
     handleCommand(command) {
       delCookie('username');
       this.name = "";
-      // this.$router.push('/login');
     }
   }
 }

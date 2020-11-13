@@ -11,7 +11,6 @@ import VueCookie from 'vue-cookie'
 import { Message } from 'element-ui'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import axios from 'axios'
-// import axios from './util/interceptor.js'
 import ElementUI from 'element-ui'
 
 import './assets/scss/index.scss'

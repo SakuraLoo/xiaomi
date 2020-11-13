@@ -17,6 +17,7 @@
   @import './../assets/scss/mixin.scss';
   .service {
     padding: 27px 0 !important;
+    background-color: #fff;
     color: #666666;
     font-size: 0;
 
