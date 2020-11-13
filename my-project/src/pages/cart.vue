@@ -79,27 +79,11 @@ export default {
       editData: {},
       formLabelWidth: "200",
       //表格中的数据
-      tableData: [
-        {
-          name: "Redmi K30 5G 8GB+128GB 紫玉幻境",
-          price: 1799,
-          number: 1,
-          img: "https://cdn.cnbj0.fds.api.mi-img.com/b2c-shopapi-pms/pms_1543561468.82116708.jpg?thumb=1&w=80&h=80"
-        },
-        {
-          name: "黑鲨游戏 Type-C 耳机 黑色",
-          price: 99,
-          number: 1,
-          img: "https://cdn.cnbj0.fds.api.mi-img.com/b2c-shopapi-pms/pms_1575882207.04955417.jpg?thumb=1&w=80&h=80"
-        },
-        {
-          name: "米家压力IH电饭煲1S 白色",
-          price: 899,
-          number: 1,
-          img: "https://cdn.cnbj0.fds.api.mi-img.com/b2c-shopapi-pms/pms_1553764670.0369286.jpg?thumb=1&w=80&h=80"
-        }
-      ]
+      tableData: []
     };
+  },
+  mounted () {
+    this.tableDataFunc();
   },
   // 通过computed计算属性及时改变
   computed: {
@@ -107,14 +91,12 @@ export default {
     totalPrice() {
       var price_total = 0;
       for (var i = 0; i < this.multipleSelection.length; i++) {
-        price_total +=
-          this.multipleSelection[i].price * this.multipleSelection[i].number;
+        price_total += this.multipleSelection[i].price * this.multipleSelection[i].number;
       }
       return price_total;
     },
     // 总数
     rowClassName(row) {
-      //把每一行的索引放进row
       var data = row._data.tableData.length
       return data;
     },
@@ -128,6 +110,11 @@ export default {
     }
   },
   methods: {
+    tableDataFunc () {
+      this.$axios.get(' http://mock.shtodream.cn/mock/5fa8fc178e13766542114da6/mimal/carts').then((res)=>{
+        this.tableData = res.data.data.cartProductVoList;
+      })
+    },
     // 点击发生的变化
     handleSelectionChange(val) {
       this.multipleSelection = val; //给定义的数组赋值
