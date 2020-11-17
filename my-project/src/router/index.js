@@ -7,7 +7,6 @@ import cart from '@/pages/cart'
 import login from '@/pages/login'
 import register from '@/pages/register'
 import order from '@/pages/order'
-import orderConfirm from '@/pages/orderConfirm'
 import orderList from '@/pages/orderList'
 import orderPay from '@/pages/orderPay'
 
@@ -69,12 +68,14 @@ const router = new Router({
     {
       path: '/order',
       name: 'order',
-      component: order
-    },
-    {
-      path: '/orderConfirm',
-      name: 'orderConfirm',
-      component: orderConfirm
+      component: order,
+      children:[
+        {
+          path: '/orderConfirm',
+          name: 'orderConfirm',
+          component: () => import('../pages/orderConfirm.vue')
+        }
+      ]
     },
     {
       path: '/orderList',

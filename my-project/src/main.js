@@ -12,6 +12,7 @@ import { Message } from 'element-ui'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import axios from 'axios'
 import ElementUI from 'element-ui'
+import VDistpicker from 'v-distpicker'
 
 import './assets/scss/index.scss'
 import 'swiper/swiper-bundle.css'
@@ -26,6 +27,7 @@ Vue.use(ElementUI);
 Vue.use(VueLazyLoad, {
   loading: require('./assets/imgs/loading-svg/loading-bars.svg')
 });
+Vue.component('v-distpicker', VDistpicker);
 
 Vue.prototype.$axios = axios;
 Vue.prototype.$http = axios;

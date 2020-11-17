@@ -33,8 +33,8 @@ import { setCookie,getCookie,delCookie } from '../assets/js/cookie.js'
   .order-header{
     display: flex;
     align-items: center;
-    padding:30px 0;
-    height: 100px;
+    padding: 30px 0;
+    height: 40px;
     border-bottom:2px solid #FF6600;
     background-color: #fff;
     .header-logo {
@@ -75,6 +75,7 @@ import { setCookie,getCookie,delCookie } from '../assets/js/cookie.js'
       h2{
         font-size:28px;
         color:#333333;
+        font-weight: normal;
       }
       span{
         font-size:14px;

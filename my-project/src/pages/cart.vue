@@ -48,7 +48,7 @@
           </div>
           <div class="cart-order-right">
             <span> 合计：<b> {{ totalPrice }} </b>元 </span>
-            <router-link to="/order"><button>去结算</button></router-link>
+            <router-link to="/orderConfirm"><button>去结算</button></router-link>
           </div>
         </div>
 
