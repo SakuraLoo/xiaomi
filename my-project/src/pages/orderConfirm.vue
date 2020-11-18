@@ -12,9 +12,9 @@
               <p class="address-li-phone"> {{ item.phone }} </p>
               <p class="address-li-address"> {{ item.simpleAddress }} </p>
               <p class="address-li-address"> {{ item.address }} </p>
-              <span class="address-li-motify">修改</span>
+              <span class="address-li-motify" @click="dialogFormVisible = true, isAdd = index, DialogClick(index)">修改</span>
             </li>
-            <li class="address-li add">
+            <li class="address-li add" @click="dialogFormVisible = true, isAdd = true, DialogClick(true)">
               <div class="add_contain">
                 <i class="fa fa-plus-circle"></i>
                 <p>添加新地址</p>
@@ -74,40 +74,30 @@
         </div>
       </div>
 
-      <el-button type="text" @click="dialogFormVisible = true">打开嵌套表单的 Dialog</el-button>
-        <el-dialog title="添加收货地址" :visible.sync="dialogFormVisible">
+        <el-dialog title="添加收货地址" :visible.sync="dialogFormVisible" @close="closeDialog">
           <el-form :model="form">
             <el-form-item>
               <el-row :gutter="24">
-                <el-col :span="12"><el-input class="form_left" v-model="form.name" placeholder="姓名"></el-input></el-col>
-                <el-col :span="12"><el-input class="form_left" v-model="form.phone" placeholder="手机号"></el-input></el-col>
+                <el-col :span="12"><el-input v-model="form.name" placeholder="姓名"></el-input></el-col>
+                <el-col :span="12"><el-input v-model="form.phone" placeholder="手机号"></el-input></el-col>
               </el-row>
             </el-form-item>
-            <!-- <el-form-item>
-              <div class="block">
-                <el-cascader
-                  placeholder="选择省 / 市 / 区 / 街道"
-                  :options="options"
-                  filterable
-                >
-                </el-cascader>
-              </div>
-            </el-form-item> -->
-
             <el-form-item>
-              <v-distpicker></v-distpicker>
-            </el-form-item>
-
-            <el-form-item>
-              <el-input placeholder="详细地址" type="textarea" v-model="form.desc"></el-input>
+              <v-distpicker
+                :province="form.nowAdPriv" :city="form.nowAdCity" :area="form.nowAdArea"
+                @province="onChangeProvince2" @city="onChangeCity2" @area="onChangeArea2"
+              ></v-distpicker>
             </el-form-item>
             <el-form-item>
-              <el-input placeholder="地址标签" v-model="form.tag"></el-input>
+              <el-input placeholder="详细地址" type="textarea" v-model="form.address"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input placeholder="地址标签" v-model="form.company"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            <el-button type="primary" @click="onSubmit">确 定</el-button>
           </div>
         </el-dialog>
 
@@ -120,6 +110,7 @@ export default {
   name: 'orderConfirm',
   data () {
     return {
+      // 收货地址
       addressList: [
         {
           name: "张三",
@@ -130,6 +121,7 @@ export default {
           class: "address-li"
         }
       ],
+      // 结算的商品列表
       cartList: [
         {
           id: 1,
@@ -160,260 +152,141 @@ export default {
           num: 1
         }
       ],
-      postStyle: 0,
+      postStyle: 0, // 配送方式: 0为包邮，其他为运费
       record: {
-        discount: 0,
-        coupon: 0
+        discount: 0, // 活动优惠
+        coupon: 0 // 优惠券抵扣
       },
-      CartSum: 0,
+      CartSum: 0, // 应付总额，在mounted中计算
 
-      dialogTableVisible: false,
-      dialogFormVisible: false,
-      form: {
+      isAdd: false, // 是否已存在
+      dialogFormVisible: false, // 弹窗是否打开
+      form: { // 表单中的数据
+        id: 0,
         name: '',
         phone: ''
-      },
-      formLabelWidth: '120px',
-
-
-
-      // options: [{
-      //   value: 'zhinan',
-      //   label: '指南',
-      //   children: [{
-      //     value: 'shejiyuanze',
-      //     label: '设计原则',
-      //     children: [{
-      //       value: 'yizhi',
-      //       label: '一致'
-      //     }, {
-      //       value: 'fankui',
-      //       label: '反馈'
-      //     }, {
-      //       value: 'xiaolv',
-      //       label: '效率'
-      //     }, {
-      //       value: 'kekong',
-      //       label: '可控'
-      //     }]
-      //   }, {
-      //     value: 'daohang',
-      //     label: '导航',
-      //     children: [{
-      //       value: 'cexiangdaohang',
-      //       label: '侧向导航'
-      //     }, {
-      //       value: 'dingbudaohang',
-      //       label: '顶部导航'
-      //     }]
-      //   }]
-      // }, {
-      //   value: 'zujian',
-      //   label: '组件',
-      //   children: [{
-      //     value: 'basic',
-      //     label: 'Basic',
-      //     children: [{
-      //       value: 'layout',
-      //       label: 'Layout 布局'
-      //     }, {
-      //       value: 'color',
-      //       label: 'Color 色彩'
-      //     }, {
-      //       value: 'typography',
-      //       label: 'Typography 字体'
-      //     }, {
-      //       value: 'icon',
-      //       label: 'Icon 图标'
-      //     }, {
-      //       value: 'button',
-      //       label: 'Button 按钮'
-      //     }]
-      //   }, {
-      //     value: 'form',
-      //     label: 'Form',
-      //     children: [{
-      //       value: 'radio',
-      //       label: 'Radio 单选框'
-      //     }, {
-      //       value: 'checkbox',
-      //       label: 'Checkbox 多选框'
-      //     }, {
-      //       value: 'input',
-      //       label: 'Input 输入框'
-      //     }, {
-      //       value: 'input-number',
-      //       label: 'InputNumber 计数器'
-      //     }, {
-      //       value: 'select',
-      //       label: 'Select 选择器'
-      //     }, {
-      //       value: 'cascader',
-      //       label: 'Cascader 级联选择器'
-      //     }, {
-      //       value: 'switch',
-      //       label: 'Switch 开关'
-      //     }, {
-      //       value: 'slider',
-      //       label: 'Slider 滑块'
-      //     }, {
-      //       value: 'time-picker',
-      //       label: 'TimePicker 时间选择器'
-      //     }, {
-      //       value: 'date-picker',
-      //       label: 'DatePicker 日期选择器'
-      //     }, {
-      //       value: 'datetime-picker',
-      //       label: 'DateTimePicker 日期时间选择器'
-      //     }, {
-      //       value: 'upload',
-      //       label: 'Upload 上传'
-      //     }, {
-      //       value: 'rate',
-      //       label: 'Rate 评分'
-      //     }, {
-      //       value: 'form',
-      //       label: 'Form 表单'
-      //     }]
-      //   }, {
-      //     value: 'data',
-      //     label: 'Data',
-      //     children: [{
-      //       value: 'table',
-      //       label: 'Table 表格'
-      //     }, {
-      //       value: 'tag',
-      //       label: 'Tag 标签'
-      //     }, {
-      //       value: 'progress',
-      //       label: 'Progress 进度条'
-      //     }, {
-      //       value: 'tree',
-      //       label: 'Tree 树形控件'
-      //     }, {
-      //       value: 'pagination',
-      //       label: 'Pagination 分页'
-      //     }, {
-      //       value: 'badge',
-      //       label: 'Badge 标记'
-      //     }]
-      //   }, {
-      //     value: 'notice',
-      //     label: 'Notice',
-      //     children: [{
-      //       value: 'alert',
-      //       label: 'Alert 警告'
-      //     }, {
-      //       value: 'loading',
-      //       label: 'Loading 加载'
-      //     }, {
-      //       value: 'message',
-      //       label: 'Message 消息提示'
-      //     }, {
-      //       value: 'message-box',
-      //       label: 'MessageBox 弹框'
-      //     }, {
-      //       value: 'notification',
-      //       label: 'Notification 通知'
-      //     }]
-      //   }, {
-      //     value: 'navigation',
-      //     label: 'Navigation',
-      //     children: [{
-      //       value: 'menu',
-      //       label: 'NavMenu 导航菜单'
-      //     }, {
-      //       value: 'tabs',
-      //       label: 'Tabs 标签页'
-      //     }, {
-      //       value: 'breadcrumb',
-      //       label: 'Breadcrumb 面包屑'
-      //     }, {
-      //       value: 'dropdown',
-      //       label: 'Dropdown 下拉菜单'
-      //     }, {
-      //       value: 'steps',
-      //       label: 'Steps 步骤条'
-      //     }]
-      //   }, {
-      //     value: 'others',
-      //     label: 'Others',
-      //     children: [{
-      //       value: 'dialog',
-      //       label: 'Dialog 对话框'
-      //     }, {
-      //       value: 'tooltip',
-      //       label: 'Tooltip 文字提示'
-      //     }, {
-      //       value: 'popover',
-      //       label: 'Popover 弹出框'
-      //     }, {
-      //       value: 'card',
-      //       label: 'Card 卡片'
-      //     }, {
-      //       value: 'carousel',
-      //       label: 'Carousel 走马灯'
-      //     }, {
-      //       value: 'collapse',
-      //       label: 'Collapse 折叠面板'
-      //     }]
-      //   }]
-      // }, {
-      //   value: 'ziyuan',
-      //   label: '资源',
-      //   children: [{
-      //     value: 'axure',
-      //     label: 'Axure Components'
-      //   }, {
-      //     value: 'sketch',
-      //     label: 'Sketch Templates'
-      //   }, {
-      //     value: 'jiaohu',
-      //     label: '组件交互文档'
-      //   }]
-      // }]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
+      }
     }
   },
   mounted() {
+    // 计算应付总额
     this.cartList.forEach(item => {
       this.CartSum += (item.price * item.num);
-    })
+    });
   },
   methods: {
+    // 选择地址
     AddressClick (index) {
       this.addressList.forEach(item => {
         item.class = "address-li";
       })
       this.addressList[index].class += " active";
+    },
+    // 省市区三联动
+    onChangeProvince2(data){
+      this.form.nowAdPrivCode=data.code;
+      this.form.nowAdPriv=data.value;
+    },
+    onChangeCity2(data){
+      this.form.nowAdCityCode=data.code;
+      this.form.nowAdCity=data.value;
+    },
+    onChangeArea2(data){
+      this.form.nowAdAreaCode=data.code;
+      this.form.nowAdArea=data.value;
+    },
+
+
+
+
+
+
+    // 弹窗确定
+    onSubmit() {
+      var whichInput, // 哪个未填写
+      isMessage = true // 提示的开关
+
+      // 提示未填写
+      if(!this.form.name) {
+        whichInput = "姓名";
+      } else if(!this.form.phone) {
+        whichInput = "手机号";
+      } else if(!(this.form.nowAdPriv && this.form.nowAdCity && this.form.nowAdArea)) {
+        whichInput = "省/市/区";
+      } else if(!this.form.address) {
+        whichInput = "详细地址";
+      } else if(!this.form.company) {
+        whichInput = "地址标签";
+      } else {
+        // 不提示
+        isMessage = false;
+        this.dialogFormVisible = false; // 关闭弹窗
+
+        if(this.isAdd == true) { // 新增
+          this.addressList.push({
+            id: this.addressList.length,
+            name: this.form.name,
+            phone: this.form.phone,
+            simpleAddress: this.form.nowAdPriv + this.form.nowAdCity + this.form.nowAdArea,
+            address: this.form.address,
+            company: this.form.company,
+            class: "address-li"
+          })
+        } else { // 修改
+          this.addressList[index] = {
+            id: index,
+            name: this.form.name,
+            phone: this.form.phone,
+            simpleAddress: this.form.nowAdPriv + this.form.nowAdCity + this.form.nowAdArea,
+            address: this.form.address,
+            company: this.form.company,
+            class: "address-li"
+          }
+        }
+      }
+
+      // 是否提示
+      if(isMessage == false) {} else {
+        this.$message({
+          showClose: true,
+          message: '请填写' + whichInput,
+          type: 'error'
+        });
+      }
+    },
+    // // 关闭弹窗
+    // closeDialog() {
+    //   // 打开清空表单
+    //   var values = Object.keys(this.form);
+    //   values.forEach(item1 => {
+    //     this.form[item1] = "";
+    //   })
+    // },
+    // 打开弹窗
+    DialogClick(isAdd) {
+      // 新增
+      if(isAdd == true) {
+        console.log('nlnno')
+        // 打开清空表单
+        var values = Object.keys(this.form);
+        values.forEach(item1 => {
+          this.form[item1] = "";
+        })
+      } else {
+        // 修改
+        this.form.id = this.isAdd;
+        this.form.name = this.addressList[isAdd].name;
+        this.form.phone = this.addressList[isAdd].phone;
+        this.form.simpleAddress = this.addressList[isAdd].simpleAddress;
+        this.form.address = this.addressList[isAdd].address;
+        this.form.company = this.addressList[isAdd].company;
+      }
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "../assets/scss/index.scss";
 .orderConfirm {
   background-color: #eee;
@@ -665,10 +538,25 @@ export default {
     .el-form-item {
       margin-bottom: 20px;
     }
-    .el-cascader {
-      width: 100%;
-    }
 
   }
 }
+
+.distpicker-address-wrapper {
+  font-size: 0;
+  label {
+    display: inline-block;
+    width: calc((100% - 20px*2)/3);
+    margin-right: 20px;
+    &:last-child {
+      margin: 0;
+    }
+    select {
+      width: 100%;
+      padding: 0 10px;
+      font-size: 14px;
+    }
+  }
+}
+
 </style>
