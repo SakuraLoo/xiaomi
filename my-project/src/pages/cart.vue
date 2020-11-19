@@ -48,7 +48,7 @@
           </div>
           <div class="cart-order-right">
             <span> 合计：<b> {{ totalPrice }} </b>元 </span>
-            <router-link to="/orderConfirm"><button>去结算</button></router-link>
+            <router-link :to="'/orderConfirm/' + orderId"><button>去结算</button></router-link>
           </div>
         </div>
 
@@ -79,7 +79,8 @@ export default {
       editData: {},
       formLabelWidth: "200",
       //表格中的数据
-      tableData: []
+      tableData: [],
+      orderId: []
     };
   },
   mounted () {
@@ -105,7 +106,9 @@ export default {
       var number_total = 0;
       for (var i = 0; i < this.multipleSelection.length; i++) {
         number_total += this.multipleSelection[i].number;
+        this.orderId.push(this.multipleSelection[i].id);
       }
+      this.orderId = [...new Set(this.orderId)];
       return number_total;
     }
   },

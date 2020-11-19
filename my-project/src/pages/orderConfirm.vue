@@ -6,22 +6,20 @@
         <div class="orderConfirm_nav_top">
           <section class="address">
             <h3>收货地址</h3>
-            <li :class="'address-li ' + item['class']" v-for="(item,index) in addressList" :key="index" @click="item.class = ((item.class==undefined) ? undefined : 'active'),DialogClick(item)" :style="item.class==undefined ? 'float:right' : ''">
-              <div class="address-li-add" v-if="item.class == undefined">
-                <div class="add_contain">
-                  <i class="fa fa-plus-circle"></i>
-                  <p>添加新地址</p>
-                </div>
-              </div>
-              <div v-else>
-                <p class="address-li-name"> {{ item.name }} </p>
-                <span class="address-li-company"> {{ item.company }} </span>
-                <p class="address-li-phone"> {{ item.phone }} </p>
-                <p class="address-li-address"> {{ item.simpleAddress }} </p>
-                <p class="address-li-address"> {{ item.address }} </p>
-                <span class="address-li-motify" @click="dialogFormVisible = true">修改</span>
-              </div>
+            <li :class="'address-li ' + item.class" v-for="(item,index) in addressList" :key="index" @click="ActiveClick(item)">
+              <p class="address-li-name"> {{ item.name }} </p>
+              <span class="address-li-company"> {{ item.company }} </span>
+              <p class="address-li-phone"> {{ item.phone }} </p>
+              <p class="address-li-address"> {{ item.nowAdPriv+item.nowAdCity+item.nowAdArea }} </p>
+              <p class="address-li-address"> {{ item.address }} </p>
+              <span class="address-li-motify" @click="dialogFormVisible = true,DialogClick(true,item)">修改</span>
             </li>
+            <div class="address-li address-li-add" @click="DialogClick(false,{})">
+              <div class="add_contain">
+                <i class="fa fa-plus-circle"></i>
+                <p>添加新地址</p>
+              </div>
+            </div>
           </section>
           <section class="cartSection">
             <h3>商品及优惠券</h3>
@@ -32,8 +30,8 @@
                   <span> {{ item.name }} </span>
                 </a>
                 <div class="price_box">
-                  <span> {{ item.price }}元 × {{ item.num }} </span>
-                  <span class="sum"> {{ item.price * item.num }}元 </span>
+                  <span> {{ item.price }}元 × {{ item.number }} </span>
+                  <span class="sum"> {{ item.price * item.number }}元 </span>
                 </div>
               </li>
             </ul>
@@ -113,48 +111,19 @@ export default {
     return {
       // 收货地址
       addressList: [
-        {},
         {
           id: 0,
           name: "张三",
           phone: "12345678910",
-          simpleAddress: "上海上海市黄浦区半淞园路街道",
+          nowAdPriv: "上海市",
+          nowAdCity: "上海市",
+          nowAdArea: "黄浦区",
           address: "上海市黄浦区半淞园路街道4111111号",
           company: "公司",
-          class: "address-li"
+          class: ""
         }
       ],
-      // 结算的商品列表
-      cartList: [
-        {
-          id: 1,
-          img: "https://cdn.cnbj0.fds.api.mi-img.com/b2c-shopapi-pms/pms_1575882207.04955417.jpg?thumb=1&w=30&h=30",
-          name: "Redmi K30 5G 8GB+128GB 紫玉幻境",
-          price: 1799,
-          num: 1
-        },
-        {
-          id: 2,
-          img: "https://cdn.cnbj0.fds.api.mi-img.com/b2c-shopapi-pms/pms_1543561468.82116708.jpg?thumb=1&w=30&h=30",
-          name: "黑鲨游戏 Type-C 耳机 黑色",
-          price: 99,
-          num: 1
-        },
-        {
-          id: 3,
-          img: "https://cdn.cnbj0.fds.api.mi-img.com/b2c-shopapi-pms/pms_1553764670.0369286.jpg?thumb=1&w=30&h=30",
-          name: "米家压力IH电饭煲1S 白色",
-          price: 1099,
-          num: 1
-        },
-        {
-          id: 4,
-          img: "https://cdn.cnbj0.fds.api.mi-img.com/b2c-shopapi-pms/pms_1563334968.4986834.jpg?thumb=1&w=30&h=30 ",
-          name: "Redmi充电宝 10000mAh 白色",
-          price: 59,
-          num: 1
-        }
-      ],
+      cartList: [], // 结算的商品列表
       postStyle: 0, // 配送方式: 0为包邮，其他为运费
       record: {
         discount: 0, // 活动优惠
@@ -172,12 +141,41 @@ export default {
     }
   },
   mounted() {
-    /*-- 计算应付总额 --*/
-    this.cartList.forEach(item => {
-      this.CartSum += (item.price * item.num);
-    });
+    var orderId = this.$route.params.id; // 购物车选择的商品
+    /*-- 获取订单列表 --*/
+    this.GetHomeAjax(orderId);
   },
   methods: {
+    /*-- 接通axios服务 --*/
+    GetHomeAjax (orderId) {
+      this.$axios.get('http://mock.shtodream.cn/mock/5fa8fc178e13766542114da6/mimal/carts')
+      .then(res => {
+        this.HomeAjaxSuccess(res,orderId);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    },
+    /*-- 获取axios数据 --*/
+    HomeAjaxSuccess (res,orderId) {
+      var cartList = res.data.data.cartProductVoList; // 购物车所有的商品
+      var orderIdArr = orderId.split(','); // 购物车选择的商品id
+      cartList.forEach(item1 => {
+        orderIdArr.forEach(item2 => {
+          if(item1.id == item2) {
+            this.cartList.push(item1)
+          }
+        })
+      })
+      this.CountCartSum(orderArr);
+    },  
+    /*-- 计算应付总额 --*/
+    CountCartSum (orderArr) {
+      orderArr.forEach(item => {
+        this.CartSum += (item.price * item.number);
+      })
+    },
+
     /*-- 省市区三联动 --*/
     onChangeProvince2(data){  
       this.form.nowAdPrivCode=data.code;
@@ -192,10 +190,18 @@ export default {
       this.form.nowAdArea=data.value;
     },
     
+    /*-- 切换地址的样式 --*/
+    ActiveClick (item) {
+      this.addressList.forEach(li => {
+        li.class = "";
+      })
+      item.class = "active";
+    },
+    
     /*-- 打开弹窗 --*/
-    DialogClick (item) {
+    DialogClick (isAdd,item) {
       // 新增
-      if(item.class == undefined) {
+      if(isAdd == false) {
         this.isAdd = false; // 此地址未存在
         this.form = {}; // 清空表单
         this.dialogFormVisible = true;
@@ -206,7 +212,9 @@ export default {
           id: item.id,
           name: item.name,
           phone: item.phone,
-          simpleAddress: item.simpleAddress,
+          nowAdPriv: item.nowAdPriv,
+          nowAdCity: item.nowAdCity,
+          nowAdArea: item.nowAdArea,
           address: item.address,
           company: item.company
         }
@@ -236,7 +244,9 @@ export default {
         var newForm = { // 新填写的表单
           name: this.form.name,
           phone: this.form.phone,
-          simpleAddress: this.form.nowAdPriv + this.form.nowAdCity + this.form.nowAdArea,
+          nowAdPriv: this.form.nowAdPriv,
+          nowAdCity: this.form.nowAdCity,
+          nowAdArea: this.form.nowAdArea,
           address: this.form.address,
           company: this.form.company,
           class: "address-li"
@@ -315,32 +325,6 @@ export default {
               opacity: 1;
             }
           }
-          
-          &-add {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            &:hover {
-              i {
-                color: #B0B0B0 !important;
-                transition: all .5s ease;
-              }
-            }
-            .add_contain {
-              display: block;
-              text-align: center;
-              i {
-                margin-bottom: 5px;
-                font-size: 32px;
-                color: #e0e0e0;
-              }
-              p {
-                color: #b0b0b0;
-              }
-            }
-          }
 
           p,span {
             line-height: 20px;
@@ -367,7 +351,30 @@ export default {
             color: $colorA !important;
             opacity: 0;
           }
-
+        }
+          
+        &-li-add {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          &:hover {
+            i {
+              color: #B0B0B0 !important;
+              transition: all .5s ease;
+            }
+          }
+          .add_contain {
+            display: block;
+            text-align: center;
+            i {
+              margin-bottom: 5px;
+              font-size: 32px;
+              color: #e0e0e0;
+            }
+            p {
+              color: #b0b0b0;
+            }
+          }
         }
       }
 

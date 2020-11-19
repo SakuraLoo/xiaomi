@@ -71,7 +71,7 @@ const router = new Router({
       component: order,
       children:[
         {
-          path: '/orderConfirm',
+          path: '/orderConfirm/:id',
           name: 'orderConfirm',
           component: () => import('../pages/orderConfirm.vue')
         }
