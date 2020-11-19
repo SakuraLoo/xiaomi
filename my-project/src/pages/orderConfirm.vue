@@ -6,18 +6,20 @@
         <div class="orderConfirm_nav_top">
           <section class="address">
             <h3>收货地址</h3>
-            <li :class="item.class" v-for="(item,index) in addressList" :key="index" @click="AddressClick(index)">
-              <p class="address-li-name"> {{ item.name }} </p>
-              <span class="address-li-company"> {{ item.company }} </span>
-              <p class="address-li-phone"> {{ item.phone }} </p>
-              <p class="address-li-address"> {{ item.simpleAddress }} </p>
-              <p class="address-li-address"> {{ item.address }} </p>
-              <span class="address-li-motify" @click="dialogFormVisible = true, isAdd = index, DialogClick(index)">修改</span>
-            </li>
-            <li class="address-li add" @click="dialogFormVisible = true, isAdd = true, DialogClick(true)">
-              <div class="add_contain">
-                <i class="fa fa-plus-circle"></i>
-                <p>添加新地址</p>
+            <li :class="'address-li ' + item['class']" v-for="(item,index) in addressList" :key="index" @click="item.class = ((item.class==undefined) ? undefined : 'active'),DialogClick(item)" :style="item.class==undefined ? 'float:right' : ''">
+              <div class="address-li-add" v-if="item.class == undefined">
+                <div class="add_contain">
+                  <i class="fa fa-plus-circle"></i>
+                  <p>添加新地址</p>
+                </div>
+              </div>
+              <div v-else>
+                <p class="address-li-name"> {{ item.name }} </p>
+                <span class="address-li-company"> {{ item.company }} </span>
+                <p class="address-li-phone"> {{ item.phone }} </p>
+                <p class="address-li-address"> {{ item.simpleAddress }} </p>
+                <p class="address-li-address"> {{ item.address }} </p>
+                <span class="address-li-motify" @click="dialogFormVisible = true">修改</span>
               </div>
             </li>
           </section>
@@ -66,7 +68,6 @@
           </section>
         </div>
       </div>
-
       <div class="container">
         <div class="orderConfirm_nav_bottom">
           <router-link to="/alipay" class="alipayBtn">去结算</router-link>
@@ -74,7 +75,7 @@
         </div>
       </div>
 
-        <el-dialog title="添加收货地址" :visible.sync="dialogFormVisible" @close="closeDialog">
+        <el-dialog title="添加收货地址" :visible.sync="dialogFormVisible">
           <el-form :model="form">
             <el-form-item>
               <el-row :gutter="24">
@@ -112,7 +113,9 @@ export default {
     return {
       // 收货地址
       addressList: [
+        {},
         {
+          id: 0,
           name: "张三",
           phone: "12345678910",
           simpleAddress: "上海上海市黄浦区半淞园路街道",
@@ -169,21 +172,14 @@ export default {
     }
   },
   mounted() {
-    // 计算应付总额
+    /*-- 计算应付总额 --*/
     this.cartList.forEach(item => {
       this.CartSum += (item.price * item.num);
     });
   },
   methods: {
-    // 选择地址
-    AddressClick (index) {
-      this.addressList.forEach(item => {
-        item.class = "address-li";
-      })
-      this.addressList[index].class += " active";
-    },
-    // 省市区三联动
-    onChangeProvince2(data){
+    /*-- 省市区三联动 --*/
+    onChangeProvince2(data){  
       this.form.nowAdPrivCode=data.code;
       this.form.nowAdPriv=data.value;
     },
@@ -195,12 +191,27 @@ export default {
       this.form.nowAdAreaCode=data.code;
       this.form.nowAdArea=data.value;
     },
-
-
-
-
-
-
+    
+    /*-- 打开弹窗 --*/
+    DialogClick (item) {
+      // 新增
+      if(item.class == undefined) {
+        this.isAdd = false; // 此地址未存在
+        this.form = {}; // 清空表单
+        this.dialogFormVisible = true;
+      } else {
+        this.isAdd = true; // 此地址已存在
+        // 修改
+        this.form = {
+          id: item.id,
+          name: item.name,
+          phone: item.phone,
+          simpleAddress: item.simpleAddress,
+          address: item.address,
+          company: item.company
+        }
+      }
+    },
     // 弹窗确定
     onSubmit() {
       var whichInput, // 哪个未填写
@@ -222,26 +233,19 @@ export default {
         isMessage = false;
         this.dialogFormVisible = false; // 关闭弹窗
 
-        if(this.isAdd == true) { // 新增
-          this.addressList.push({
-            id: this.addressList.length,
-            name: this.form.name,
-            phone: this.form.phone,
-            simpleAddress: this.form.nowAdPriv + this.form.nowAdCity + this.form.nowAdArea,
-            address: this.form.address,
-            company: this.form.company,
-            class: "address-li"
-          })
+        var newForm = { // 新填写的表单
+          name: this.form.name,
+          phone: this.form.phone,
+          simpleAddress: this.form.nowAdPriv + this.form.nowAdCity + this.form.nowAdArea,
+          address: this.form.address,
+          company: this.form.company,
+          class: "address-li"
+        }
+        if(this.isAdd == false) { // 新增
+          newForm["id"] = this.addressList.length;
+          this.addressList.push(newForm);
         } else { // 修改
-          this.addressList[index] = {
-            id: index,
-            name: this.form.name,
-            phone: this.form.phone,
-            simpleAddress: this.form.nowAdPriv + this.form.nowAdCity + this.form.nowAdArea,
-            address: this.form.address,
-            company: this.form.company,
-            class: "address-li"
-          }
+          newForm["id"] = this.form.id;
         }
       }
 
@@ -252,34 +256,6 @@ export default {
           message: '请填写' + whichInput,
           type: 'error'
         });
-      }
-    },
-    // // 关闭弹窗
-    // closeDialog() {
-    //   // 打开清空表单
-    //   var values = Object.keys(this.form);
-    //   values.forEach(item1 => {
-    //     this.form[item1] = "";
-    //   })
-    // },
-    // 打开弹窗
-    DialogClick(isAdd) {
-      // 新增
-      if(isAdd == true) {
-        console.log('nlnno')
-        // 打开清空表单
-        var values = Object.keys(this.form);
-        values.forEach(item1 => {
-          this.form[item1] = "";
-        })
-      } else {
-        // 修改
-        this.form.id = this.isAdd;
-        this.form.name = this.addressList[isAdd].name;
-        this.form.phone = this.addressList[isAdd].phone;
-        this.form.simpleAddress = this.addressList[isAdd].simpleAddress;
-        this.form.address = this.addressList[isAdd].address;
-        this.form.company = this.addressList[isAdd].company;
       }
     }
   }
@@ -339,7 +315,10 @@ export default {
               opacity: 1;
             }
           }
-          &.add {
+          
+          &-add {
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
