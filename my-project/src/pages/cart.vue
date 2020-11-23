@@ -10,7 +10,10 @@
           :data="tableData"
           border
           style="width: 100%"
+          :row-class-name="tableRowClassName"
           @selection-change="handleSelectionChange"
+          @select="onRowClick"
+          @select-all="selectAll"
         >
           <el-table-column label-class-name="DisabledSelection" width="100" type="selection" header-align="center" align="center"></el-table-column>
           <el-table-column label="商品名称" width="430" align="center">
@@ -26,7 +29,7 @@
           </el-table-column>
           <el-table-column label="数量" align="center">
             <template slot-scope="scope">
-              <el-input-number v-model="scope.row.number" :min="1" :max="10"></el-input-number>
+              <el-input-number v-model="scope.row.number" :min="1" :max="10" @change="handleChange(scope.$index, scope.row)"></el-input-number>
             </template>
           </el-table-column>
           <el-table-column label="小计" align="center">
@@ -48,7 +51,7 @@
           </div>
           <div class="cart-order-right">
             <span> 合计：<b> {{ totalPrice }} </b>元 </span>
-            <router-link :to="'/orderConfirm/' + orderId"><button>去结算</button></router-link>
+            <router-link :to="'/orderConfirm/' + selectStr" :class="currentRowIndex.length == 0 ? 'orderLink' : ''"><button>去结算</button></router-link>
           </div>
         </div>
 
@@ -80,7 +83,9 @@ export default {
       formLabelWidth: "200",
       //表格中的数据
       tableData: [],
-      orderId: []
+      currentRowIndex: [],
+      selectArr: [],
+      selectStr: ""
     };
   },
   mounted () {
@@ -101,50 +106,75 @@ export default {
       var data = row._data.tableData.length
       return data;
     },
-    // 已选择
+    // 已选择 件
     totalNumber() {
       var number_total = 0;
       for (var i = 0; i < this.multipleSelection.length; i++) {
         number_total += this.multipleSelection[i].number;
-        this.orderId.push(this.multipleSelection[i].id);
       }
-      this.orderId = [...new Set(this.orderId)];
       return number_total;
     }
   },
   methods: {
+    /*-- axios获取商品列表 --*/
     tableDataFunc () {
-      this.$axios.get(' http://mock.shtodream.cn/mock/5fa8fc178e13766542114da6/mimal/carts').then((res)=>{
+      this.$axios.get('http://mock.shtodream.cn/mock/5fa8fc178e13766542114da6/mimal/carts').then((res)=>{
         this.tableData = res.data.data.cartProductVoList;
       })
     },
-    // 点击发生的变化
+    /*-- 赋值给"已选择 件" --*/
     handleSelectionChange(val) {
       this.multipleSelection = val; //给定义的数组赋值
     },
-    handleDelete(index, row) {
-      this.tableData.splice(index, 1); //删除表格的数据
+    /*-- 选择行 --*/
+    tableRowClassName({ row, rowIndex }) {
+      row.row_index = rowIndex;
     },
-    // 点击添加弹窗的确定按钮
-    addSureBtn() {
-      this.tableData.push(this.formData);
-      // 初始化添加表单
-      this.formData = {
-        name: "",
-        age: "",
-        sex: ""
-      };
+    onRowClick (row,event,colum) {
+      this.currentRowIndex = [];
+      this.selectArr = [];
+      this.selectStr = "";
+      for(var i=0;i<row.length;i++) {
+        this.currentRowIndex.push(row[i].row_index);
+        this.selectArr.push({
+          index: row[i].row_index,
+          num: row[i].number
+        });
+        this.selectStr += '{index:' + row[i].row_index + ';num:' +  row[i].number + '},';
+      }
+      this.selectStr = this.selectStr.slice(0,this.selectStr.length - 1);
     },
 
-    tableRowClassName({ row, rowIndex }) {
-      row.row_index = rowIndex
-    },
-    
-    onRowClick(row, event, column) {
-      this.currentRowIndex = []
-      for (var i = 0; i < row.length; i++) {
-        this.currentRowIndex.push(row[i].row_index)
+    /*-- 全选 --*/
+    selectAll (row) {
+      this.currentRowIndex = [];
+      for(var i=0;i<row.length;i++) {
+        this.currentRowIndex.push(row[i].row_index);
       }
+    },
+
+    /*-- 计数器 --*/
+    handleChange (index,row) {
+      this.selectStr = "";
+      for(var i=0;i<this.selectArr.length;i++) {
+        if(row.id == this.selectArr[i].index) {
+          this.selectArr[i].num = row.number;
+        }
+      }
+      this.selectArr.forEach(item => {
+        this.selectStr += '{index:' + item.index + ';num:' + item.num + '},';
+      })
+      this.selectStr = this.selectStr.slice(0,this.selectStr.length - 1);
+    },
+
+    /*-- 删除行 --*/
+    handleDelete(index, row) {
+      this.$confirm('确定删除吗？', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(() => {
+        this.tableData.splice(index, 1); //删除表格的数据
+      }).catch(() => {});
     }
   }
 };
@@ -211,6 +241,7 @@ export default {
             font-weight: normal;
           }
         }
+
         a {
           display: inline-block;
           vertical-align: bottom;
@@ -229,6 +260,14 @@ export default {
             }
           }
         }
+        .orderLink {  
+          pointer-events: none;
+          button {
+            background: #e0e0e0 !important;
+            color: #b0b0b0 !important;
+          }
+        }
+
       }
     }
   }
@@ -355,6 +394,30 @@ export default {
   width: 20px;
   * {
     width: 20px;
+  }
+}
+
+
+// 删除-提示框
+.el-message-box__message {
+  padding: 20px 0;
+  p {
+    text-align: center;
+    font-size: 18px;
+  }
+}
+.el-message-box__btns {
+  padding: 10px 50px;
+  @include flex();
+  flex-direction: row-reverse;
+  button {
+    padding: 15px;
+    width: calc((100% - 25px)/2);
+    border-radius: 0;
+    &:last-child {
+      background-color: $colorA;
+      border-color: $colorA;
+    }
   }
 }
 </style>  

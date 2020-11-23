@@ -55,7 +55,7 @@
                 </div>
               </div>
               <div class="record-right">
-                <li><label>商品件数：</label><span> {{ cartList.length }}件 </span></li>
+                <li><label>商品件数：</label><span> {{ CartNum }}件 </span></li>
                 <li><label>商品总价：</label><span> {{ CartSum }}元 </span></li>
                 <li><label>活动优惠：</label><span> -{{ record.discount }}元 </span></li>
                 <li><label>优惠券抵扣：</label><span> -{{ record.coupon }}元 </span></li>
@@ -129,6 +129,7 @@ export default {
         discount: 0, // 活动优惠
         coupon: 0 // 优惠券抵扣
       },
+      CartNum: 0, // 商品件数，在mounted中计算
       CartSum: 0, // 应付总额，在mounted中计算
 
       isAdd: false, // 是否已存在
@@ -141,34 +142,45 @@ export default {
     }
   },
   mounted() {
-    var orderId = this.$route.params.id; // 购物车选择的商品
+    var getString = this.$route.params.id; // router-link传过来的字符串
+    var getArr = getString.split(",");
+    var newGetArr = [];
+    getArr.forEach(item => {
+      item = item.replace(/\;/g,',');
+      newGetArr.push(eval("("+item+")")); // 购物车选择的商品
+    })
+
     /*-- 获取订单列表 --*/
-    this.GetHomeAjax(orderId);
+    this.GetHomeAjax(newGetArr);
   },
   methods: {
     /*-- 接通axios服务 --*/
-    GetHomeAjax (orderId) {
+    GetHomeAjax (orderIdArr) {
       this.$axios.get('http://mock.shtodream.cn/mock/5fa8fc178e13766542114da6/mimal/carts')
       .then(res => {
-        this.HomeAjaxSuccess(res,orderId);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+        this.HomeAjaxSuccess(res,orderIdArr);
+      }).catch(err => {});
     },
     /*-- 获取axios数据 --*/
-    HomeAjaxSuccess (res,orderId) {
+    HomeAjaxSuccess (res,orderIdArr) {
       var cartList = res.data.data.cartProductVoList; // 购物车所有的商品
-      var orderIdArr = orderId.split(','); // 购物车选择的商品id
       cartList.forEach(item1 => {
         orderIdArr.forEach(item2 => {
-          if(item1.id == item2) {
+          if(item1.id == item2.index) {
+            item1.number = item2.num;
             this.cartList.push(item1)
           }
         })
       })
-      this.CountCartSum(orderArr);
-    },  
+      this.CountCartSum(this.cartList);
+    this.GetCartNum(this.cartList);
+    },
+    /*-- 计算商品件数 --*/
+    GetCartNum (cartList) {
+      cartList.forEach(item => {
+        this.CartNum += item.number;
+      })
+    },
     /*-- 计算应付总额 --*/
     CountCartSum (orderArr) {
       orderArr.forEach(item => {
