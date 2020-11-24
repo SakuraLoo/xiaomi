@@ -51,7 +51,7 @@
           </div>
           <div class="cart-order-right">
             <span> 合计：<b> {{ totalPrice }} </b>元 </span>
-            <router-link :to="'/orderConfirm/' + selectStr" :class="currentRowIndex.length == 0 ? 'orderLink' : ''"><button>去结算</button></router-link>
+            <router-link :to="'/orderConfirm/' + selectStr" :class="selectArr.length == 0 ? 'orderLink' : ''"><button>去结算</button></router-link>
           </div>
         </div>
 
@@ -83,7 +83,6 @@ export default {
       formLabelWidth: "200",
       //表格中的数据
       tableData: [],
-      currentRowIndex: [],
       selectArr: [],
       selectStr: ""
     };
@@ -131,11 +130,9 @@ export default {
       row.row_index = rowIndex;
     },
     onRowClick (row,event,colum) {
-      this.currentRowIndex = [];
       this.selectArr = [];
       this.selectStr = "";
       for(var i=0;i<row.length;i++) {
-        this.currentRowIndex.push(row[i].row_index);
         this.selectArr.push({
           index: row[i].row_index,
           num: row[i].number
@@ -147,10 +144,16 @@ export default {
 
     /*-- 全选 --*/
     selectAll (row) {
-      this.currentRowIndex = [];
+      this.selectArr = [];
+      this.selectStr = "";
       for(var i=0;i<row.length;i++) {
-        this.currentRowIndex.push(row[i].row_index);
+        this.selectArr.push({
+          index: row[i].row_index,
+          num: row[i].number
+        });
+        this.selectStr += '{index:' + row[i].row_index + ';num:' +  row[i].number + '},';
       }
+      this.selectStr = this.selectStr.slice(0,this.selectStr.length - 1);
     },
 
     /*-- 计数器 --*/
