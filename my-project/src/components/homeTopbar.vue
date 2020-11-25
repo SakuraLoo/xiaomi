@@ -15,10 +15,10 @@
         </el-dropdown>
 
         <!-- <a v-if="name">{{name}}</a> -->
-        <a v-if="!name" @click="GotoLogin">登录</a>
-        <a v-if="!name" @click="GotoRegister">注册</a>
-        <a v-if="name">我的订单</a>
-        <a class="my-cart"><i class="fa fa-cart-plus" @click="GotoCart"></i>购物车</a>
+        <router-link v-if="!name" to="/login">登录</router-link>
+        <router-link v-if="!name" to="/register">注册</router-link>
+        <router-link v-if="name" to="/order/list">我的订单</router-link>
+        <a class="my-cart" @click="GotoCart"><i class="fa fa-cart-plus"></i>购物车</a>
       </ul>
     </div>
   </div>
@@ -49,8 +49,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$store);
-    
     /*页面挂载获取保存的cookie值，渲染到页面上*/
     let uname = getCookie('username')
     this.name = uname
@@ -63,18 +61,16 @@ export default {
     ...mapMutations(['username','cartCount'])
   },
   methods: {
-    GotoLogin () {
-      this.$router.push('/login');
-    },
-    GotoRegister () {
-      this.$router.push('/register');
-    },
-    GotoCart () {
-      this.$router.push('/cart');
-    },
     handleCommand(command) {
       delCookie('username');
       this.name = "";
+    },
+    GotoCart () {
+      if(this.name) { // 已登录
+        this.$router.push('/cart');
+      } else { // 未登录
+        this.$router.push('/login');
+      }
     }
   }
 }
@@ -100,32 +96,34 @@ export default {
     width: $min-width;
     margin: 0 auto;
     @include flex();
-    a {
-      display: inline-block;
-      color: #bbb;
-      margin-right: 17px;
-    }
-    a:hover {
-      color: #eee;
-      transition: all 0.2s ease;
-    }
+    ul {
+      @include flex();
+      a {
+        display: inline-block;
+        color: #bbb;
+        margin-right: 17px;
+      }
+      a:hover {
+        color: #eee;
+        transition: all 0.2s ease;
+      }
 
-    .topbar-container a:hover {
-      margin-right: 17px !important;
-    }
-    el-dropdown-item {
-      width: 100px;
-    }
+      .topbar-container a:hover {
+        margin-right: 17px !important;
+      }
+      el-dropdown-item {
+        width: 100px;
+      }
 
-    .my-cart {
-      position: relative;
-      margin-right: 0;
-      width: 110px;
-      background-color: $colorA;
-      text-align: center;
-      color: #fff;
-      .fa {
-        margin-right: 5px;
+      .my-cart {
+        margin-right: 0;
+        width: 110px;
+        background-color: $colorA;
+        text-align: center;
+        color: #fff;
+        .fa {
+          margin-right: 5px;
+        }
       }
     }
   }

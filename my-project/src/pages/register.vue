@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <div class="contain">
-      <img src="../assets/imgs/logo-mi.png"/>
+      <router-link to="/home"><img src="../assets/imgs/logo-mi.png"/></router-link>
       <el-form ref="form" :model="form">
         <h1>注册小米账号</h1>
         <el-form-item label="账号">
@@ -79,8 +79,11 @@ body,html,#app {
     background-color: #fff;
     text-align: center;
     font-size: 14px;
-    img {
-      width: 48px;
+    a {
+      display: block;
+      img {
+        width: 48px;
+      }
     }
     .el-form {
       margin: 40px auto 100px auto;
