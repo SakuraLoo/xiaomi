@@ -68,7 +68,7 @@
       </div>
       <div class="container">
         <div class="orderConfirm_nav_bottom">
-          <router-link to="/alipay" class="alipayBtn">去结算</router-link>
+          <a class="alipayBtn" @click="GotoPay">去结算</a>
           <router-link to="/cart" class="cartBtn">返回购物车</router-link>
         </div>
       </div>
@@ -123,6 +123,7 @@ export default {
           class: ""
         }
       ],
+      selectAddress: "",
       cartList: [], // 结算的商品列表
       postStyle: 0, // 配送方式: 0为包邮，其他为运费
       record: {
@@ -208,6 +209,7 @@ export default {
         li.class = "";
       })
       item.class = "active";
+      this.selectAddress = item;
     },
     
     /*-- 打开弹窗 --*/
@@ -277,6 +279,16 @@ export default {
           showClose: true,
           message: '请填写' + whichInput,
           type: 'error'
+        });
+      }
+    },
+    //点击"结算"事件。未选择地址 > 提醒"请选择地址"
+    GotoPay () {
+      if(this.selectAddress) {
+        this.$router.push('/orderPay');
+      } else {
+        this.$alert('请选择地址！', {
+          confirmButtonText: '确定'
         });
       }
     }
@@ -526,6 +538,13 @@ export default {
           background-color: #e75607;
         }
       }
+      .orderLink {  
+        pointer-events: none;
+        button {
+          background: #e0e0e0 !important;
+          color: #b0b0b0 !important;
+        }
+      }
       .cartBtn {
         &:active {
           box-shadow: inset 0 2px 4px rgba(0,0,0,.18);
@@ -557,4 +576,7 @@ export default {
   }
 }
 
+.el-message-box__btns button {
+  margin: 0 auto;
+}
 </style>

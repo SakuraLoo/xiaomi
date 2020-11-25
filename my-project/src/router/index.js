@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import index from '@/pages/index'
 import home from '@/pages/home'
-import alipay from '@/pages/alipay'
 import cart from '@/pages/cart'
 import login from '@/pages/login'
 import register from '@/pages/register'
@@ -56,11 +55,6 @@ const router = new Router({
       component: register
     },
     {
-      path: '/alipay',
-      name: 'alipay',
-      component: alipay
-    },
-    {
       path: '/cart',
       name: 'cart',
       component: cart
@@ -74,13 +68,18 @@ const router = new Router({
           path: '/orderConfirm/:id',
           name: 'orderConfirm',
           component: () => import('../pages/orderConfirm.vue')
+        },
+        {
+          path: 'alipay/:orderId',
+          name: 'alipay',
+          component: () => import('../pages/alipay.vue')
+        },
+        {
+          path: 'list',
+          name: 'orderList',
+          component: () => import('../pages/orderList.vue')
         }
       ]
-    },
-    {
-      path: '/orderList',
-      name: 'orderList',
-      component: orderList
     },
     {
       path: '/orderPay',
