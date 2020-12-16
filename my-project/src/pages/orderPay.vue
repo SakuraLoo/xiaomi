@@ -76,6 +76,7 @@ import OrderHeader from '../components/OrderHeader'
 import ScanPayCode from '../components/ScanPayCode'
 import Modal from '../components/Modal'
 import QRCode from 'qrcode'
+import { constants } from 'fs';
 export default{
   name:'order-pay',
   components:{
@@ -103,11 +104,14 @@ export default{
   methods:{
     getOrderDetail(){
       this.$axios.get('http://mock.shtodream.cn/mock/5fa8fc178e13766542114da6/mimal/orders').then((res)=>{
-        let item = res.data.data.shippingVo;
-        this.addressInfo = `${item.receiverName} ${item.receiverMobile} ${item.receiverProvince} ${item.receiverCity} ${item.receiverDistrict} ${item.receiverAddress}`;
-        this.orderDetail = res.data.data.orderItemVoList;
-        this.payment = res.data.data.payment;
-        this.orderId = res.data.data.orderNo;
+        let items = res.data.data;
+        items.forEach(item => {
+          let ship = item.shippingVo;
+          this.addressInfo = `${ship.receiverMobile} ${ship.receiverProvince} ${ship.receiverCity} ${ship.receiverDistrict} ${ship.receiverAddress}`;
+          this.orderDetail = item.orderItemVoList;
+          this.payment = item.payment;
+          this.orderId = item.orderNo;
+        })
       })
     },
     paySubmit(payType){

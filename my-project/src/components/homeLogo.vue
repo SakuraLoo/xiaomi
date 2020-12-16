@@ -32,6 +32,7 @@ export default {
     display: inline-block;
     width: $home_logo_img_width;
     height: $home_logo_img_width;
+    background-color: $colorA;
 
     a {
       display: inline-block;
